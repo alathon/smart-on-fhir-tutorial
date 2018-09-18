@@ -17,8 +17,19 @@
   <body>
     <div id='errors'>
     <div id="app">
-      {{ message }}
-    </div>
+      SCAUT Medication List: <br/>
+      <li v-for="med in scautMedications">
+        Medication name: {{ med.name }} <br/>
+        Medication form: {{ med.form }} <br/>
+        Medication strength: {{ med.strength }}
+      </li>
+      <br/>
+      EHR Medication List: <br/>
+      <li v-for="med in ehrMedications">
+        Medication name: {{ med.name }} <br/>
+        Medication form: {{ med.form }} <br/>
+        Medication strength: {{ med.strength }}
+      </li>
     </div>
     <div id="loading" class="spinner">
       <div class="bounce1"></div>
@@ -110,8 +121,8 @@ var app = new Vue({
   data() {
     return {
       message: 'Hi there',
-      scautMedicationList: [],
-      ehrMedicationList: []
+      scautMedications: [],
+      ehrMedications: []
     }
   },
 
