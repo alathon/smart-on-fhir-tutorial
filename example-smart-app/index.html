@@ -8,6 +8,7 @@
     <link rel='stylesheet' type='text/css' href='./src/css/example-smart-app.css'>
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!--
       Temporarily disable cerner-smart-embeddable-lib
       <link rel='stylesheet' type='text/css' href='./lib/css/cerner-smart-embeddable-lib-1.0.0.min.css'>
@@ -103,12 +104,29 @@
       );
     </script>
   <script>
-var app = new Vue({
+import axios from 'axios';
+
+export default {
   el: '#app',
-  data: {
-    message: 'Hello Vue!'
+  data() {
+    return {
+      scautMedicationList: [],
+      ehrMedicationList: []
+    }
+  },
+
+  // Fetches when the component is created.
+  created() {
+    axios.get(`https://dev-gateway.scaut.dk/9DnRb5LDxx7Dp`)
+    .then(response => {
+      console.log('Response:');
+      console.log(response);
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
   }
-})
+}
   </script>
   </body>
 </html>
