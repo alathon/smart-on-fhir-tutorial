@@ -130,6 +130,7 @@ var app = new Vue({
   created() {
     axios.get(`https://dev-gateway.scaut.dk/9DnRb5LDxx7Dp`)
     .then(response => {
+      this.data.scautMedications = response.data.medicationList.fields[0].medications;
       console.log('Response:');
       console.log(response);
     })
