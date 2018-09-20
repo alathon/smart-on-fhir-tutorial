@@ -9,137 +9,78 @@
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!--
-      Temporarily disable cerner-smart-embeddable-lib
-      <link rel='stylesheet' type='text/css' href='./lib/css/cerner-smart-embeddable-lib-1.0.0.min.css'>
-    -->
-  </head>
-  <body>
-    <div id='errors'>
-    <div id="app">
-      SCAUT Medications List: <br/>
-      <li v-for="med in scautMedications">
-        Medication name: {{ med.name }} <br/>
-        Medication form: {{ med.form }} <br/>
-        Medication strength: {{ med.strength }}
-      </li>
-      <br/>
-      EHR Medication List: <br/>
-      <li v-for="med in ehrMedications">
-        Medication name: {{ med.name }} <br/>
-        Medication form: {{ med.form }} <br/>
-        Medication strength: {{ med.strength }}
-      </li>
-    </div>
-    <div id="loading" class="spinner">
-      <div class="bounce1"></div>
-      <div class="bounce2"></div>
-      <div class="bounce3"></div>
-    </div>
-    <div id='holder' >
-      <h2>Example-SMART-App</h2>
-
-      <h2>Patient Resource</h2>
-      <table>
-        <tr>
-          <th>First Name:</th>
-          <td id='fname'></td>
-        </tr>
-        <tr>
-          <th>Last Name:</th>
-          <td id='lname'></td>
-        </tr>
-        <tr>
-          <th>Gender:</th>
-          <td id='gender'></td>
-        </tr>
-        <tr>
-          <th>Date of Birth:</th>
-          <td id='birthdate'></td>
-        </tr>
-      </table>
-      <h2>Observation Resource</h2>
-      <table>
-        <tr>
-          <th>Height:</th>
-          <td id='height'></td>
-        </tr>
-        <tr>
-          <th>Systolic Blood Pressure:</th>
-          <td id='systolicbp'></td>
-
-        </tr>
-        <tr>
-          <th>Diastolic Blood Pressure:</th>
-          <td id='diastolicbp'></td>
-        </tr>
-        <tr>
-          <th>LDL:</th>
-          <td id='ldl'></td>
-        </tr>
-        <tr>
-          <th>HDL:</th>
-          <td id='hdl'></td>
-        </tr>
-      </table>
-    </div>
-    <!-- Required JS files to enable this page to embed within an MPage -->
-    <!--
-      Temporarily disable cerner-smart-embeddable-lib
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js'></script>
-      <script src='./lib/js/cerner-smart-embeddable-lib-1.0.0.min.js'></script>
-    -->
-
-    <!-- Application-level javascript-->
-    <script src='./src/js/example-smart-app.js'></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- FHIR Client JS Library -->
     <script src='./lib/js/fhir-client-v0.1.12.js'></script>
 
     <!-- Prevent session bleed caused by single threaded embedded browser and sessionStorage API -->
     <!-- https://github.com/cerner/fhir-client-cerner-additions -->
     <script src='./lib/js/fhir-client-cerner-additions-1.0.0.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-      extractData().then(
-        //Display Patient Demographics and Observations if extractData was success
-        function(p) {
-          drawVisualization(p);
-        },
+  </head>
+  <body>
+    <div id='errors'>
+    <div id="loading" class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    <div id='holder'>
+      <div id="app">
+        <h2>Patient</h2>
+        <table>
+          <tr>
+            <th>First Name:</th>
+            <td>{{ fname }}</td>
+          </tr>
+          <tr>
+            <th>Last Name:</th>
+            <td>{{ lname }}</td>
+          </tr>
+          <tr>
+            <th>Gender:</th>
+            <td>{{ gender }}</td>
+          </tr>
+          <tr>
+            <th>Date of Birth:</th>
+            <td>{{ birthdate }}</td>
+          </tr>
+        </table>
 
-        //Display 'Failed to call FHIR Service' if extractData failed
-        function() {
-          $('#loading').hide();
-          $('#errors').html('<p> Failed to call FHIR Service </p>');
-        }
-      );
-    </script>
-  
-<script>
-var app = new Vue({
-  el: '#app',
-  data() {
-    return {
-      message: 'Hi there',
-      scautMedications: [],
-      ehrMedications: []
-    }
-  },
-
-  // Fetches when the component is created.
-  created() {
-    axios.get(`https://dev-gateway.scaut.dk/9DnRb5LDxx7Dp`)
-    .then(response => {
-      this.scautMedications = response.data.medicationList.fields[0].medications;
-      console.log('Response:');
-      console.log(response);
-    })
-    .catch(e => {
-      this.errors.push(e)
-    })
-  }
-})
-  </script>
-
+        <h2>SCAUT Medications List</h2>
+          <table v-for="med in scautMedications" style="padding-bottom: 10px">
+            <tr>
+              <th>Medication name:</th>
+              <td>{{ med.name }}</td>
+            </tr>
+            <tr>
+              <th>Medication form:</th>
+              <td>{{ med.form }}</td>
+            </tr>
+            <tr>
+              <th>Medication strength</th>
+              <td>{{ med.strength }}</td>
+            </tr>
+          </table>
+        <br/>
+        <h2>EHR Medication List</h2>
+          <table v-for="med in ehrMedications" style="padding-bottom: 10px">
+            <tr>
+              <th>Medication text:</th>
+              <td>{{ med.text }}</td>
+            </tr>
+            <tr>
+              <th>Medication dosage:</th>
+              <td>{{ med.dosage }}</td>
+            </tr>
+            <tr>
+              <th>Medication lastUpdated</th>
+              <td>{{ med.lastUpdated }}</td>
+            </tr>
+          </table>
+          <br/>
+      </div>
+    </div>
+    <!-- Application-level javascript-->
+    <script src='./src/js/vue-app.js'></script>
   </body>
 </html>
